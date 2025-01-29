@@ -23,3 +23,13 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+Cypress.Commands.add("getByDataTestId", (selector) => {
+    return cy.get(`[data-testid=${selector}]`)
+  })
+
+Cypress.Commands.add("loginByUI", (email = "allansk@qa.com.br", senha = "teste") => {
+    cy.getByDataTestId("email").type(email);
+    cy.getByDataTestId("senha").type(senha);
+    cy.getByDataTestId("entrar").click();
+  });
+  
