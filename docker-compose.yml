@@ -1,0 +1,9 @@
+services:
+  cypress:
+    build: .
+    container_name: cypress_tests
+    volumes:
+      - .:/app
+    environment:
+      - CYPRESS_baseUrl=https://front.serverest.dev/
+    command: ["npx", "cypress", "run"]
