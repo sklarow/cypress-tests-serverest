@@ -1,5 +1,5 @@
 describe("Test endpoint /usuarios/", () => {
-    it("Deve criar um novo usuário com sucesso", () => {
+    it("Should create an user successfully", () => {
       cy.request("POST", Cypress.env("apiBaseUrl") + "/usuarios", {
         nome: "Teste QA",
         email: `teste${Date.now()}@teste.com`,
