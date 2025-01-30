@@ -10,5 +10,13 @@ describe("Test endpoint /usuarios/", () => {
         expect(response.body).to.have.property("message", "Cadastro realizado com sucesso");
       });
     });
+
+    it("Should return the user list", () => {
+        cy.request("GET", Cypress.env("apiBaseUrl") + "/usuarios").then((response) => {
+          expect(response.status).to.eq(200);
+          expect(response.body).to.have.property("quantidade");
+          expect(response.body).to.have.property("usuarios");
+        });
+      });
   });
   
