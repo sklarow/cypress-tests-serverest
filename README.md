@@ -21,6 +21,7 @@ Since this is just an exercise on a [App I Don't Control](https://docs.cypress.i
       - [Running a Single Test File with Docker](#running-a-single-test-file-with-docker)
   - [🧪 Test Structure](#-test-structure)
   - [📋 TODO](#-todo)
+  - [Test Execution Sample](#test-execution-sample)
 
 ## Prerequisites
 
@@ -129,4 +130,34 @@ I opted to make just a few tests that covers a good portion of the functionaliti
 - Automate test result reporting and integration with CI/CD pipelines.
 - Serve a HTML report from the Docker execution, so this can be send after a pipeline execution
 
-In general, the code need to be reviewed against the [Cypress docs best practices](https://docs.cypress.io/app/core-concepts/best-practices), and for sure I'm missing a lot of things in this TO-DO list, but coding is an ongoing process of improvement and refinement... 
+In general, the code need to be reviewed against the [Cypress docs best practices](https://docs.cypress.io/app/core-concepts/best-practices), and for sure I'm missing a lot of things in this TO-DO list, but coding is an ongoing process of improvement and refinement...
+
+## Test Execution Sample
+
+```
+cypress_tests  |        Spec                                              Tests  Passing  Failing  Pending  Skipped  
+cypress_tests  |   ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+cypress_tests  |   │ ✔  api/produtos.cy.js                       411ms        1        1        -        -        - │
+cypress_tests  |   ├────────────────────────────────────────────────────────────────────────────────────────────────┤
+cypress_tests  |   │ ✔  api/usuarios.cy.js                       655ms        2        2        -        -        - │
+cypress_tests  |   ├────────────────────────────────────────────────────────────────────────────────────────────────┤
+cypress_tests  |   │ ✔  frontend/login.cy.js                     00:11        5        5        -        -        - │
+cypress_tests  |   ├────────────────────────────────────────────────────────────────────────────────────────────────┤
+cypress_tests  |   │ ✔  frontend/signup.cy.js                    00:12        2        2        -        -        - │
+cypress_tests  |   ├────────────────────────────────────────────────────────────────────────────────────────────────┤
+cypress_tests  |   │ ✔  frontend/user-admin.cy.js                00:06        1        1        -        -        - │
+cypress_tests  |   ├────────────────────────────────────────────────────────────────────────────────────────────────┤
+cypress_tests  |   │ ✔  frontend/user.cy.js                      00:05        1        1        -        -        - │
+cypress_tests  |   └────────────────────────────────────────────────────────────────────────────────────────────────┘
+cypress_tests  |     ✔  All specs passed!                        00:36       12       12        -        -        -  
+cypress_tests  | 
+```
+
+For the full test output, check [test-execution-sample-output.log](test-execution-sample-output.log)
+
+
+The command used to generate this output was:
+
+```sh
+docker-compose up | tee test-execution-sample-output.log
+```
