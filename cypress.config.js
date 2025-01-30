@@ -1,3 +1,4 @@
+const { allureCypress } = require("allure-cypress/reporter")
 const { defineConfig } = require('cypress')
 
 module.exports = defineConfig({
@@ -8,7 +9,10 @@ module.exports = defineConfig({
       defaultPassword: 'teste'
     },
     setupNodeEvents(on, config) {
-      // implement node event listeners here
+      allureCypress(on, config, {
+        resultsDir: "allure-results",
+      });
+      return config;
     }
   }
 })

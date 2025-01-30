@@ -1,6 +1,6 @@
 services:
   cypress:
-    build: .
+    image: cypress/included:latest
     container_name: cypress_tests
     volumes:
       - .:/app
