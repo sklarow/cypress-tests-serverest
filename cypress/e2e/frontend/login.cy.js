@@ -1,13 +1,11 @@
 describe("Login Test", () => {   
-    before(() => {
-        cy.createTestUserViaUI();
-      })
 
     beforeEach(() => {
         cy.visit("https://front.serverest.dev/")
       })
 
     it("Login successfully", () => {
+      cy.createTestUserViaUI();
       const user = Cypress.env("testUser");
 
       if (!user || !user.email || !user.password) {
