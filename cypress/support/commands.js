@@ -42,6 +42,9 @@ Cypress.Commands.add("createTestUserViaUI", (admin = false) => {
     const password = Cypress.env('defaultPassword')
 
     cy.visit("/cadastrarusuarios");
+
+    cy.intercept('POST', '**/usuarios').as('postUser');
+
     cy.getByDataTestId("nome").type("Usuário de Teste");
     cy.getByDataTestId("email").type(userEmail);
     cy.getByDataTestId("password").type(password);
@@ -50,6 +53,18 @@ Cypress.Commands.add("createTestUserViaUI", (admin = false) => {
     }
     cy.getByDataTestId("cadastrar").click();
     cy.contains("Cadastro realizado com sucesso").should("be.visible");
+
+    cy.wait('@postUser').then((interception) => {
+        // Assert the status code
+        expect(interception.response.statusCode).to.eq(201);
+        
+        // Assert the `administrador` field in the request body
+        if (admin){
+            expect(interception.request.body.administrador).to.eq('true'); 
+        } else {
+            expect(interception.request.body.administrador).to.eq('false'); 
+        }  
+      });
 
     return cy.wrap({
         email: userEmail,
