@@ -14,7 +14,7 @@ describe("Regular User Test", () => {
         cy.getByDataTestId("logout").contains("Logout");
       })
 
-    it.only("Search an inexistent product", () => {     
+    it("Search an inexistent product", () => {     
         cy.visit("/home");
         cy.getByDataTestId("pesquisar").type(`Produto inexistente ${Date.now()}`);
         cy.getByDataTestId("botaoPesquisar").click();
