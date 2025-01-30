@@ -1,19 +1,15 @@
 describe("Login Test", () => {   
 
     beforeEach(() => {
-        cy.visit("https://front.serverest.dev/")
+        cy.visit("/")
       })
 
     it("Login successfully", () => {
-      cy.createTestUserViaUI();
-      const user = Cypress.env("testUser");
-
-      if (!user || !user.email || !user.password) {
-        throw new Error("testUser credentials are missing in Cypress.env()");
-      }
-
-      cy.loginViaUI(user.email, user.password);
-      cy.getByDataTestId("logout").contains("Logout");
+        cy.createTestUserViaUI().then((user) => {
+            cy.visit("/");        
+            cy.loginViaUI(user.email, user.password);
+            cy.getByDataTestId("logout").contains("Logout");
+          });
     });
 
     it("Login failed - Invalid email and/or password", () => {
