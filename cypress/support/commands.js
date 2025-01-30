@@ -27,7 +27,7 @@ Cypress.Commands.add("getByDataTestId", (selector) => {
     return cy.get(`[data-testid=${selector}]`)
   })
 
-Cypress.Commands.add("loginByUI", (email = "allansk@qa.com.br", password = "teste") => {
+Cypress.Commands.add("loginViaUI", (email, password) => {
     if (email != ""){
         cy.getByDataTestId("email").type(email);
     }
@@ -35,5 +35,23 @@ Cypress.Commands.add("loginByUI", (email = "allansk@qa.com.br", password = "test
         cy.getByDataTestId("senha").type(password);
     }
     cy.getByDataTestId("entrar").click();
+  });
+
+Cypress.Commands.add("createTestUserViaUI", () => {
+    const userEmail = `user${Date.now()}@testing.com`;
+    const password = Cypress.env('defaultPassword')
+
+    cy.visit("https://front.serverest.dev/cadastrarusuarios");
+    cy.getByDataTestId("nome").type("Usuário de Teste");
+    cy.getByDataTestId("email").type(userEmail);
+    cy.getByDataTestId("password").type(password);
+    cy.getByDataTestId("cadastrar").click();
+
+    cy.contains("Cadastro realizado com sucesso").should("be.visible");
+
+    Cypress.env('testUser', {
+        email: userEmail,
+        password: password
+    });
   });
   
