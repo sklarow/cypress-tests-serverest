@@ -45,12 +45,10 @@ Cypress.Commands.add("createTestUserViaUI", (admin = false) => {
     cy.getByDataTestId("nome").type("Usuário de Teste");
     cy.getByDataTestId("email").type(userEmail);
     cy.getByDataTestId("password").type(password);
-    cy.getByDataTestId("cadastrar").click();
-
     if (admin){
         cy.getByDataTestId("checkbox").check();
     }
-
+    cy.getByDataTestId("cadastrar").click();
     cy.contains("Cadastro realizado com sucesso").should("be.visible");
 
     return cy.wrap({
