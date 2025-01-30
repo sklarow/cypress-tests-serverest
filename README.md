@@ -11,17 +11,16 @@ Since this is just an exercise on a [App I Don't Control](https://docs.cypress.i
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
   - [Configuration](#configuration)
-  - [Running the Tests](#running-the-tests)
+  - [🧪 Running the Tests](#-running-the-tests)
     - [Running Cypress UI](#running-cypress-ui)
     - [Running Cypress in Headless Mode](#running-cypress-in-headless-mode)
     - [Running API Tests](#running-api-tests)
     - [Running Frontend Tests](#running-frontend-tests)
     - [Running a Single Test File](#running-a-single-test-file)
-      - [Locally](#locally)
-      - [Using Docker](#using-docker)
-  - [Docker Usage](#docker-usage)
-  - [Test Structure](#test-structure)
-  - [TODO](#todo)
+  - [🐳 Docker Usage](#-docker-usage)
+      - [Running a Single Test File with Docker](#running-a-single-test-file-with-docker)
+  - [🧪 Test Structure](#-test-structure)
+  - [📋 TODO](#-todo)
 
 ## Prerequisites
 
@@ -45,9 +44,12 @@ npm install
 
 ## Configuration
 
-You can configure Cypress through `cypress.config.js`. To set up environment variables, use a `.env` file (if required).
+You can configure:
+- Cypress through `cypress.config.js`
+- Lint options in `.prettierrc` and `eslint.config.mjs`
+- Docker in `Dockerfile` and `docker-compose.yml`
 
-## Running the Tests
+## 🧪 Running the Tests
 
 ### Running Cypress UI
 
@@ -82,53 +84,45 @@ npx cypress run --spec "cypress/e2e/frontend/**/*.cy.js"
 
 ### Running a Single Test File
 
-#### Locally
-
 ```sh
 npx cypress run --spec "cypress/e2e/api/usuarios.cy.js"
 ```
 
-#### Using Docker
+## 🐳 Docker Usage
 
-```sh
-docker build -t cypress-tests .  
-docker-compose run --rm cypress-tests npx cypress run --spec "cypress/e2e/api/usuarios.cy.js"
-```
-
-In Docker, the same logic applies for e2e and API tests, just change the --spec "xxxxx"
-
-
-## Docker Usage
-
-The project includes Docker support. To execute tests inside a container:
+The project includes Docker support. To execute all the tests, inside a container:
 
 ```sh
 docker-compose up --build
 ```
 
-This will set up the environment and execute the test suite inside a Docker container.
+After building, to save some resources and time you can just execute:
 
-## Test Structure
+```sh
+docker-compose up 
+```
+
+#### Running a Single Test File with Docker
+
+```sh
+docker run --rm cypress-tests npx cypress run --spec "cypress/e2e/api/usuarios.cy.js"
+```
+
+In Docker, the same logic applies for e2e and API tests, just change the --spec "xxxxx"
+
+## 🧪 Test Structure
+
+I opted to make just a few tests that covers a good portion of the functionalities, they are the following:
 
 - `cypress/e2e/api/`: Contains API test cases covering user creation and authentication and a simple product list GET request.
 - `cypress/e2e/frontend/`: UI test cases focusing on user creation and login, with a form submission test, a product search test, and UI validations.
 - `cypress/fixtures/`: kept the example and added a product image sample for the form test.
 - `cypress/support/`: Custom Cypress commands to avoid repetition.
 
-## TODO
+## 📋 TODO
 
-- Handle the [ogin programmatic](https://docs.cypress.io/api/cypress-api/custom-commands#Log-in-command-using-request), since can be considered bad practice do it from the UI
-- Separate the commands in modules, in a structure like this:
-  
-cypress/
-│── support/
-│   │── commands/
-│   │   │── generalCommands.js
-│   │   │── authCommands.js
-│   │   │── userCommands.js
-│   │   └── apiCommands.js
-│   └── commands.js
-
+- Handle the [login programmatic](https://docs.cypress.io/api/cypress-api/custom-commands#Log-in-command-using-request), since can be considered bad practice do it from the UI
+- Separate the commands in modules, in a structure like generalCommands.js, authCommands.js, userCommands.js, apiCommands.js, etc..
 - Improve test coverage by adding more API and frontend tests.
 - Implement better error handling and logging.
 - Optimize test execution times by running tests in parallel.
