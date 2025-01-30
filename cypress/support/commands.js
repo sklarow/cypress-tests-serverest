@@ -23,78 +23,77 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-Cypress.Commands.add("getByDataTestId", (selector) => {
-    return cy.get(`[data-testid=${selector}]`)
+Cypress.Commands.add('getByDataTestId', (selector) => {
+  return cy.get(`[data-testid=${selector}]`)
+})
+
+Cypress.Commands.add('loginViaUI', (email, password) => {
+  if (email != '') {
+    cy.getByDataTestId('email').type(email)
+  }
+  if (password != '') {
+    cy.getByDataTestId('senha').type(password)
+  }
+  cy.getByDataTestId('entrar').click()
+})
+
+Cypress.Commands.add('createTestUserViaUI', (admin = false) => {
+  const userEmail = `user${Date.now()}@testing.com`
+  const password = Cypress.env('defaultPassword')
+
+  cy.visit('/cadastrarusuarios')
+
+  cy.intercept('POST', '**/usuarios').as('postUser')
+
+  cy.getByDataTestId('nome').type('Usuário de Teste')
+  cy.getByDataTestId('email').type(userEmail)
+  cy.getByDataTestId('password').type(password)
+  if (admin) {
+    cy.getByDataTestId('checkbox').check()
+  }
+  cy.getByDataTestId('cadastrar').click()
+  cy.contains('Cadastro realizado com sucesso').should('be.visible')
+
+  cy.wait('@postUser').then((interception) => {
+    // Assert the status code
+    expect(interception.response.statusCode).to.eq(201)
+
+    // Assert the `administrador` field in the request body
+    if (admin) {
+      expect(interception.request.body.administrador).to.eq('true')
+    } else {
+      expect(interception.request.body.administrador).to.eq('false')
+    }
   })
 
-Cypress.Commands.add("loginViaUI", (email, password) => {
-    if (email != ""){
-        cy.getByDataTestId("email").type(email);
-    }
-    if (password != ""){
-        cy.getByDataTestId("senha").type(password);
-    }
-    cy.getByDataTestId("entrar").click();
-  });
+  return cy.wrap({
+    email: userEmail,
+    password: password
+  })
+})
 
-Cypress.Commands.add("createTestUserViaUI", (admin = false) => {
-    const userEmail = `user${Date.now()}@testing.com`;
-    const password = Cypress.env('defaultPassword');
+Cypress.Commands.add('createTestUserViaAPI', (admin = false) => {
+  const userEmail = `user${Date.now()}@testing.com`
+  const password = Cypress.env('defaultPassword')
+  const isAdmin = admin ? 'true' : 'false'
 
-    cy.visit("/cadastrarusuarios");
-
-    cy.intercept('POST', '**/usuarios').as('postUser');
-
-    cy.getByDataTestId("nome").type("Usuário de Teste");
-    cy.getByDataTestId("email").type(userEmail);
-    cy.getByDataTestId("password").type(password);
-    if (admin){
-        cy.getByDataTestId("checkbox").check();
-    }
-    cy.getByDataTestId("cadastrar").click();
-    cy.contains("Cadastro realizado com sucesso").should("be.visible");
-
-    cy.wait('@postUser').then((interception) => {
-        // Assert the status code
-        expect(interception.response.statusCode).to.eq(201);
-        
-        // Assert the `administrador` field in the request body
-        if (admin){
-            expect(interception.request.body.administrador).to.eq('true'); 
-        } else {
-            expect(interception.request.body.administrador).to.eq('false'); 
-        }  
-      });
+  cy.request('POST', Cypress.env('apiBaseUrl') + '/usuarios', {
+    nome: 'Usuário de Teste',
+    email: userEmail,
+    password: password,
+    administrador: isAdmin
+  }).then((response) => {
+    expect(response.status).to.eq(201)
+    expect(response.body).to.have.property(
+      'message',
+      'Cadastro realizado com sucesso'
+    )
+    expect(response.body).to.have.property('_id')
 
     return cy.wrap({
-        email: userEmail,
-        password: password
-      });
-  });
-
-Cypress.Commands.add("createTestUserViaAPI", (admin = false) => {
-    const userEmail = `user${Date.now()}@testing.com`;
-    const password = Cypress.env('defaultPassword');
-    const isAdmin = admin ? "true" : "false";
-
-    cy.request("POST", Cypress.env("apiBaseUrl") + "/usuarios", {
-        nome: "Usuário de Teste",
-        email: userEmail,
-        password: password,
-        administrador: isAdmin,
-      }).then((response) => {
-        expect(response.status).to.eq(201);
-        expect(response.body).to.have.property("message", "Cadastro realizado com sucesso");
-        expect(response.body).to.have.property("_id");
-
-        return cy.wrap({
-            id: response.body._id,
-            email: userEmail,
-            password: password,
-          });
-      });
-
-
-  });
-  
-  
+      id: response.body._id,
+      email: userEmail,
+      password: password
+    })
+  })
+})
