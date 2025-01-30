@@ -13,9 +13,9 @@ describe("Admin User Test", () => {
         cy.loginViaUI(Cypress.env('adminEmail'), Cypress.env('adminPassword'));
       })
 
-    it.only("Add a new product", () => {     
+    it("Add a new product", () => {     
         cy.visit("/admin/cadastrarprodutos");
-        
+
         cy.intercept('POST', '**/produtos').as('postProduct');
 
         cy.getByDataTestId("preco").type("10");
