@@ -39,7 +39,7 @@ Cypress.Commands.add("loginViaUI", (email, password) => {
 
 Cypress.Commands.add("createTestUserViaUI", (admin = false) => {
     const userEmail = `user${Date.now()}@testing.com`;
-    const password = Cypress.env('defaultPassword')
+    const password = Cypress.env('defaultPassword');
 
     cy.visit("/cadastrarusuarios");
 
@@ -71,4 +71,30 @@ Cypress.Commands.add("createTestUserViaUI", (admin = false) => {
         password: password
       });
   });
+
+Cypress.Commands.add("createTestUserViaAPI", (admin = false) => {
+    const userEmail = `user${Date.now()}@testing.com`;
+    const password = Cypress.env('defaultPassword');
+    const isAdmin = admin ? "true" : "false";
+
+    cy.request("POST", Cypress.env("apiBaseUrl") + "/usuarios", {
+        nome: "Usuário de Teste",
+        email: userEmail,
+        password: password,
+        administrador: isAdmin,
+      }).then((response) => {
+        expect(response.status).to.eq(201);
+        expect(response.body).to.have.property("message", "Cadastro realizado com sucesso");
+        expect(response.body).to.have.property("_id");
+
+        return cy.wrap({
+            id: response.body._id,
+            email: userEmail,
+            password: password,
+          });
+      });
+
+
+  });
+  
   
