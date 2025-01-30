@@ -27,9 +27,13 @@ Cypress.Commands.add("getByDataTestId", (selector) => {
     return cy.get(`[data-testid=${selector}]`)
   })
 
-Cypress.Commands.add("loginByUI", (email = "allansk@qa.com.br", senha = "teste") => {
-    cy.getByDataTestId("email").type(email);
-    cy.getByDataTestId("senha").type(senha);
+Cypress.Commands.add("loginByUI", (email = "allansk@qa.com.br", password = "teste") => {
+    if (email != ""){
+        cy.getByDataTestId("email").type(email);
+    }
+    if (password != ""){
+        cy.getByDataTestId("senha").type(password);
+    }
     cy.getByDataTestId("entrar").click();
   });
   
