@@ -5,7 +5,7 @@ describe("Login Test", () => {
       })
 
     it("Login successfully", () => {
-        cy.createTestUserViaUI().then((user) => {
+        cy.createTestUserViaAPI().then((user) => {
             cy.visit("/");        
             cy.loginViaUI(user.email, user.password);
             cy.getByDataTestId("logout").contains("Logout");

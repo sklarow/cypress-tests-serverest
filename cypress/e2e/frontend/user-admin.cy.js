@@ -1,6 +1,6 @@
 describe("Admin User Test", () => {
     before(() => {
-        cy.createTestUserViaUI({admin: true}).then((user) => {
+        cy.createTestUserViaAPI({admin: true}).then((user) => {
             Cypress.env({
                 adminEmail: user.email,
                 adminPassword: user.password,
@@ -11,6 +11,7 @@ describe("Admin User Test", () => {
     beforeEach(() => {
         cy.visit("/")
         cy.loginViaUI(Cypress.env('adminEmail'), Cypress.env('adminPassword'));
+        cy.getByDataTestId("logout").contains("Logout");
       })
 
     it("Add a new product", () => {     

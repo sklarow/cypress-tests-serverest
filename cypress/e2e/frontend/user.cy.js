@@ -1,6 +1,6 @@
 describe("Regular User Test", () => {
     before(() => {
-        cy.createTestUserViaUI({admin: false}).then((user) => {
+        cy.createTestUserViaAPI({admin: false}).then((user) => {
             Cypress.env({
                 userEmail: user.email,
                 userPassword: user.password,
@@ -11,6 +11,7 @@ describe("Regular User Test", () => {
     beforeEach(() => {
         cy.visit("/")
         cy.loginViaUI(Cypress.env('userEmail'), Cypress.env('userPassword'));
+        cy.getByDataTestId("logout").contains("Logout");
       })
 
     it.only("Search an inexistent product", () => {     
