@@ -167,4 +167,4 @@ docker-compose up | tee test-execution-sample-output.log
 I added a [github workflow](https://github.com/sklarow/cypress-tests-serverest/blob/main/.github/workflows/cypress.yml) executing and publishing the Allure Report to the GitHub page of the project:
 https://sklarow.github.io/cypress-tests-serverest/
 
-🚀🚀🚀🚀
+🚀🚀🚀
