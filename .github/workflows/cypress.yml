@@ -25,9 +25,23 @@ jobs:
       - name: Run Cypress Tests with Allure
         run: npx cypress run
 
+      - name: Download Previous Allure Report Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-report
+          path: previous-allure-report
+      
+      - name: Merge previous history into allure-results
+        run: |
+          if [ -d "previous-allure-report/history" ]; then
+            cp -R previous-allure-report/history allure-results/
+          else
+            echo "No previous history folder found."
+          fi
+
       - name: Generate Allure Report
         run: |
-          npx allure-commandline generate allure-results --clean -o allure-report
+          npx allure-commandline generate allure-results -o allure-report
 
       - name: Upload Allure Report as Artifact
         uses: actions/upload-artifact@v4
