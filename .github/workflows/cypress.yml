@@ -25,29 +25,21 @@ jobs:
       - name: Run Cypress Tests with Allure
         run: npx cypress run
 
-      - name: Cache Allure Report History
-        uses: actions/cache@v3
-        id: cache-allure-history
+      - name: Get Previous Allure History
+        uses: actions/checkout@v4
+        if: always()
+        continue-on-error: true
         with:
-          path: ./.allure-history
-          key: ${{ runner.os }}-allure-history-${{ github.ref }}
-          restore-keys: ${{ runner.os }}-allure-history-
-    
-      - name: Merge Previous Allure Report History
-        run: |
-          if [ -d ".allure-history/history" ]; then
-            echo "Merging cached history into allure-results..."
-            cp -R .allure-history/history allure-results/
-          else
-            echo "No previous history found in cache."
-          fi
+          ref: gh-pages
+          path: gh-pages
 
-      - name: Generate Allure Report
-        run: |
-          npx allure-commandline generate allure-results -o allure-report
-
-      - name: Update Allure Report History in Cache
-        run: cp -R allure-report/history .allure-history || true
+      - name: Generate Allure Report with Merged History
+        uses: simple-elf/allure-report-action@master
+        if: always()
+        with:
+          allure_results: allure-results
+          allure_history: allure-history
+          keep_reports: 20
 
       - name: Upload Allure Report as Artifact
         uses: actions/upload-artifact@v4
