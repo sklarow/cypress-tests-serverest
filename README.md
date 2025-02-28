@@ -1,6 +1,6 @@
 # Cypress Tests for Serverest
 
-This repository contains automated tests for the Serverest application using [Cypress](https://www.cypress.io/). The test suite includes both API and UI (frontend) tests, structured for ease of execution and maintenance, the project also have some [Lint](https://en.wikipedia.org/wiki/Lint_(software)), [Allure Report](https://allurereport.org/docs/cypress/) and [Docker](https://www.docker.com/) support...
+This repository contains automated tests for the [Serverest application](https://serverest.dev/) using [Cypress](https://www.cypress.io/). The test suite includes both API and UI (frontend) tests, structured for ease of execution and maintenance, the project also have some [Lint](https://en.wikipedia.org/wiki/Lint_(software)), [Allure Report](https://allurereport.org/docs/cypress/) and [Docker](https://www.docker.com/) support...
 
 Since this is just an exercise on a [App I Don't Control](https://docs.cypress.io/app/end-to-end-testing/writing-your-first-end-to-end-test#Testing-Apps-You-Dont-Control), not all the best practices was applied and the code have some anti-patterns, some of them are addressed in the [TODO](#todo)
 
@@ -166,5 +166,7 @@ docker-compose up | tee test-execution-sample-output.log
 
 I added a [github workflow](https://github.com/sklarow/cypress-tests-serverest/blob/main/.github/workflows/cypress.yml) executing and publishing the Allure Report to the GitHub page of the project:
 https://sklarow.github.io/cypress-tests-serverest/
+
+(Now with execution history)
 
 🚀🚀🚀🚀🚀🚀🚀
